@@ -1,41 +1,49 @@
 "use client";
 
-import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SignInForm from "./components/sign-in-form";
 import SignUpForm from "./components/sign-up-form";
 
 export default function Authentication() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#05060A] relative overflow-hidden">
+    <div className="min-h-screen w-full bg-[#0A0F1C] flex items-center justify-center p-6">
+      <div className="max-w-md w-full">
+        {/* LOGO */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-white tracking-tight">
+            DevBarros
+          </h1>
+          <p className="text-zinc-400 text-sm mt-1 tracking-wide">
+            Painel de Acesso
+          </p>
+        </div>
 
-      {/* BACKGROUND GRADIENTS */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[200px]" />
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-cyan-500/20 rounded-full blur-[200px]" />
-      </div>
-
-      {/* CARD */}
-      <div className="w-full max-w-md px-6">
-        <div className="backdrop-blur-xl bg-white/5 border border-white/10 shadow-2xl shadow-blue-500/5 rounded-2xl p-10 animate-in fade-in zoom-in duration-700">
-
-          {/* LOGO + TÍTULO */}
-          <div className="flex flex-col items-center gap-2 mb-8">
-            <h1 className="text-3xl font-bold text-white tracking-wide">
-              DevBarros <span className="text-blue-400">System</span>
-            </h1>
-            <p className="text-zinc-400 text-sm">
-              Plataforma segura para gerenciamento avançado
-            </p>
-          </div>
-
-          {/* TABS */}
+        {/* CARD PRINCIPAL */}
+        <div className="bg-[#05070e]/60 backdrop-blur-xl border border-white/10 shadow-2xl rounded-2xl p-6">
           <Tabs defaultValue="sign-in" className="w-full">
-            <TabsContent value="sign-in" className="pt-6">
+            <TabsList className="grid grid-cols-2 w-full bg-white/5 border border-white/10 rounded-xl">
+              <TabsTrigger
+                value="sign-in"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-zinc-300 rounded-lg"
+              >
+                Entrar
+              </TabsTrigger>
+              <TabsTrigger
+                value="sign-up"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-zinc-300 rounded-lg"
+              >
+                Criar conta
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="sign-in" className="mt-6">
               <SignInForm />
             </TabsContent>
-          </Tabs>
 
+            <TabsContent value="sign-up" className="mt-6">
+              <SignUpForm />
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>

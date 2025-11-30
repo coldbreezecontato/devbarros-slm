@@ -28,20 +28,15 @@ import { authClient } from "@/lib/auth-client";
 
 const formSchema = z
   .object({
-    name: z.string("Nome inválido.").trim().min(1, "Nome é obrigatório."),
+    name: z.string().min(1, "Nome é obrigatório."),
     email: z.email("E-mail inválido."),
-    password: z.string("Senha inválida.").min(8, "Senha inválida."),
-    passwordConfirmation: z.string("Senha inválida.").min(8, "Senha inválida."),
+    password: z.string().min(8, "Senha inválida."),
+    passwordConfirmation: z.string().min(8, "Senha inválida."),
   })
-  .refine(
-    (data) => {
-      return data.password === data.passwordConfirmation;
-    },
-    {
-      error: "As senhas não coincidem.",
-      path: ["passwordConfirmation"],
-    },
-  );
+  .refine((data) => data.password === data.passwordConfirmation, {
+    message: "As senhas não coincidem.",
+    path: ["passwordConfirmation"],
+  });
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -62,10 +57,9 @@ const SignUpForm = () => {
       name: values.name,
       email: values.email,
       password: values.password,
+
       fetchOptions: {
-        onSuccess: () => {
-          router.push("/dashboard");
-        },
+        onSuccess: () => router.push("/"),
         onError: (error) => {
           if (error.error.code === "USER_ALREADY_EXISTS") {
             toast.error("E-mail já cadastrado.");
@@ -73,6 +67,7 @@ const SignUpForm = () => {
               message: "E-mail já cadastrado.",
             });
           }
+
           toast.error(error.error.message);
         },
       },
@@ -80,84 +75,105 @@ const SignUpForm = () => {
   }
 
   return (
-    <>
-      <Card className="w-full bg-transparent border-none shadow-none p-0">
-        <CardHeader>
-          <CardTitle>Criar conta</CardTitle>
-          <CardDescription>Crie uma conta para continuar.</CardDescription>
-        </CardHeader>
+    <Card className="w-full bg-white/5 border border-white/10 backdrop-blur-xl rounded-xl shadow-xl">
+      <CardHeader>
+        <CardTitle className="text-white">Criar conta</CardTitle>
+        <CardDescription className="text-zinc-400">
+          Crie sua conta no DevBarros.
+        </CardDescription>
+      </CardHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <CardContent className="grid w-full gap-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nome</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Digite seu nome" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Digite seu email" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Senha</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Digite sua senha"
-                        type="password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="passwordConfirmation"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirmar senha</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Digite a sua senha novamente"
-                        type="password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-            <CardFooter>
-              <Button type="submit">Criar conta</Button>
-            </CardFooter>
-          </form>
-        </Form>
-      </Card>
-    </>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <CardContent className="grid gap-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-zinc-300">Nome</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Digite seu nome"
+                      {...field}
+                      className="bg-white/5 border-white/10 text-white placeholder:text-zinc-500 focus-visible:ring-blue-600"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-zinc-300">Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Digite seu email"
+                      {...field}
+                      className="bg-white/5 border-white/10 text-white placeholder:text-zinc-500 focus-visible:ring-blue-600"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-zinc-300">Senha</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Digite sua senha"
+                      {...field}
+                      className="bg-white/5 border-white/10 text-white placeholder:text-zinc-500 focus-visible:ring-blue-600"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="passwordConfirmation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-zinc-300">
+                    Confirmar senha
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Confirme sua senha"
+                      {...field}
+                      className="bg-white/5 border-white/10 text-white placeholder:text-zinc-500 focus-visible:ring-blue-600"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+
+          <CardFooter>
+            <Button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-500 transition-colors text-white font-medium rounded-lg"
+            >
+              Criar conta
+            </Button>
+          </CardFooter>
+        </form>
+      </Form>
+    </Card>
   );
 };
 
