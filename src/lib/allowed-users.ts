@@ -3,4 +3,5 @@ export const allowedEmails = [
   "erickcardozodeoliveira@gmail.com",
   "caue0546@gmail.com",
   "santanafellipe61@gmail.com",
+  "teste@gmail.com"
 ];
